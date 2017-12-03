@@ -10,12 +10,12 @@ This project uses Maven so to compile run in the main directory:
 
 > mvn package
 
-However, if you do not have Maven I have included a pre-compiled jar file which can be run with while in the main directory:
+However, if you do not have Maven I have included a pre-compiled jar file which can be run while in the main directory:
 
 > java -cp .\target\viagogo-0.0.1-SNAPSHOT-jar-with-dependencies.jar display.DisplayWithGUI
 
 ## Usage
-I have added a GUI that allows the user to click on locations on the grid instead of inputting the coordinates directly, however if you want to input coordinates there is a box for the x and y coordinates, after entering the coordinates the user should click the search button to search for the 5 closest events. There is also a reset button that will reset the gridmap back to its original state.
+I have added a GUI that allows the user to click a location on the grid instead of inputting the coordinates directly. However if you want to input coordinates there are boxes to enter the x and y coordinates. After entering the coordinates the user should click the search button to search for the 5 closest events. There is also a reset button that will reset the gridmap back to its original state.
 
 ![alt Main Screen](img/mainScreen.PNG)
 ![alt After Selection](img/Selected.PNG)
