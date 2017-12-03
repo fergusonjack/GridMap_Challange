@@ -15,15 +15,15 @@ However, if you do not have Maven I have included a pre-compiled jar file which 
 > java -cp .\target\viagogo-0.0.1-SNAPSHOT-jar-with-dependencies.jar display.DisplayWithGUI
 
 ## Usage
-There is a GUI to use that allows you to click on locations on the grid instead of inputting the coordinates directly however if you want to input coordinates there is a box for the x and y coordinates to allow you to do this then click the search button to searh for the events. There is also a reset button that will reset the gridmap back to its original state and display all the events rather than just the closest 5 to the tile selected.
+I have added a GUI that allows the user to click on locations on the grid instead of inputting the coordinates directly, however if you want to input coordinates there is a box for the x and y coordinates, after entering the coordinates the user should click the search button to search for the 5 closest events. There is also a reset button that will reset the gridmap back to its original state.
 
 ![alt Main Screen](img/mainScreen.PNG)
 ![alt After Selection](img/Selected.PNG)
 
 
 ## How might you change your program if you needed to support multiple events at the same location?
-I have a tile class that currently contains an optional type of Event this could be changed to work with an ArrayList that would support multiple events at a location.
+I have a tile class that currently contains an optional type of Event this could be changed to an Arraylist to handle multiple events at a single location. The search algorithm would then have to fill its "found" ArrayList with all the events on that tile and display them as it was doing before.
 
 
 ## How would you change your program if you were working with a much larger world size?
-I have variables that allow for the change of the world size very easily just 4 variables however larger sized maps might not fit on the GUI so well and may require adjustment of the size of the buttons (this could be done by taking the size of the array in the x and y direction and having each button about 0.75 times the size of this in pixels). However, the buttons would get very small with a larger number of tiles. It would be possible to have some sort of zoom in function or selecting just a section of the map to look at but I felt this was beyond the specification at this point.
+I currently have variables that allow for the change of the grid size these are sizex, sizey, realStartx and realStarty. To change the size of the grid I would increase sizex and sizey and the realStartx and realStarty variables would be the starting x and y values on the grid (currently set at -10 -10). However, the larger the grid the less likely it will be to fit on the Graphical interface to fix this problem I would change the x and y size of the buttons to be (20x30)/size where size is the x or y size of the grid map. This would still provide problems of size at 200x200 where the boxes would be 3x3 pixels which would be quite small. In this case a zoom function could be added but I felt this was beyond the specification at this point.
