@@ -3,7 +3,6 @@ package display;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.WindowAdapter;
 import java.util.ArrayList;
@@ -14,31 +13,31 @@ import javafx.stage.WindowEvent;
 import logic.GridMap;
 import logic.Tile;
 
+//mainFrame is the JFrame ie the window
+//controlpanel is the main panel for the whole window
+//jlabels are the labels for the output of data
+
 public class DisplayWithGUI {
-	private JFrame mainFrame;
-	private JLabel headerLabel;
-	private JLabel statusLabel;
-	private JPanel controlPanel;
-	private JLabel msglabel;
+	
+	private static JFrame mainFrame;
+	private static JPanel controlPanel;
 	private static JButton[][] buttons;
 	protected static GridMap gridmap;
 	protected static JTextField xcoordinateF;
 	protected static JTextField ycoordinateF;
 	private static JLabel[] jlabels = new JLabel[5];
 
-	public DisplayWithGUI() {
-		prepareGUI();
-	}
-
+	
 	public static void main(String[] args) {
 		gridmap = new GridMap();
 		gridmap.initialise();
-		DisplayWithGUI swingLayoutDemo = new DisplayWithGUI();
-		swingLayoutDemo.addButtons(gridmap);
-		swingLayoutDemo.addSidePanel();
+		
+		DisplayWithGUI.prepareGUI();
+		DisplayWithGUI.addMap();
+		DisplayWithGUI.addSidePanel();
 	}
 
-	private void prepareGUI() {
+	private static void prepareGUI() {
 		mainFrame = new JFrame("Viagogo Challenge");
 		mainFrame.setSize(1400, 750);
 
@@ -55,10 +54,15 @@ public class DisplayWithGUI {
 		mainFrame.setVisible(true);
 	}
 
-	private void addSidePanel() {
-		JPanel panel = new JPanel(new GridLayout(3, 2));
+	//panel containing input boxes and output text labels
+	private static void addSidePanel() {
+		JPanel panel = new JPanel(new GridLayout(2, 2));
+		JPanel input = new JPanel(new GridLayout(2, 2));
+		JPanel labelHolder = new JPanel(new GridLayout(5, 1));
+		
 		xcoordinateF = new JTextField("  X Coordinate  ");
 		ycoordinateF = new JTextField("  Y Coordinate  ");
+		
 		JButton search = new JButton("Search");
 		JButton reset = new JButton("Reset");
 		
@@ -66,14 +70,10 @@ public class DisplayWithGUI {
 		search.addActionListener(new ButtonPressed());
 		reset.addActionListener(new ButtonPressed());
 		
-		xcoordinateF.setSize(150, 150);
-		ycoordinateF.setSize(150, 150);
-		panel.add(xcoordinateF);
-		panel.add(ycoordinateF);
-		panel.add(search);
-		panel.add(reset);
-		
-		JPanel labelHolder = new JPanel(new GridLayout(5, 1));
+		input.add(xcoordinateF);
+		input.add(ycoordinateF);
+		input.add(search);
+		input.add(reset);
 		
 		//add labels to display data
 		for (int i = 0; i<5 ; i++){
@@ -81,24 +81,29 @@ public class DisplayWithGUI {
 			labelHolder.add(jlabels[i]);
 		}
 		
+		panel.add(input);
 		panel.add(labelHolder);
 		controlPanel.add(panel);
 		mainFrame.setVisible(true);
 	}
 
-	private void addButtons(GridMap gridmap) {
+	//adds in the map using buttons in a grid
+	private static void addMap() {
+		int xsize = GridMap.getsizes("x");
+		int ysize = GridMap.getsizes("y");
 		JPanel panel = new JPanel();
 		panel.setSize(1000, 1000);
-		GridLayout layout = new GridLayout(21, 22);
+		GridLayout layout = new GridLayout(xsize, ysize);
+		
+		//adds some nice spacing between the buttons
 		layout.setHgap(2);
 		layout.setVgap(2);
-
 		panel.setLayout(layout);
 
-		int i = 0;
-		buttons = new JButton[21][21];
-		for (int y = 0; y < 21; y++) {
-			for (int x = 0; x < 21; x++) {
+		buttons = new JButton[xsize][ysize];
+		
+		for (int y = 0; y < ysize; y++) {
+			for (int x = 0; x < xsize; x++) {
 				buttons[x][y] = (new JButton(""));
 				buttons[x][y].setName(x + "," + y);
 				buttons[x][y].addActionListener(new ButtonPressed());
@@ -110,16 +115,16 @@ public class DisplayWithGUI {
 				}
 
 				buttons[x][y].setPreferredSize(new Dimension(30, 30));
-				i++;
 			}
 		}
 
 		controlPanel.add(panel);
 	}
 
+	//re-paints back to the original gridmap
 	protected static void rePaint() {
-		for (int y = 0; y < 21; y++) {
-			for (int x = 0; x < 21; x++) {
+		for (int y = 0; y < GridMap.getsizes("y"); y++) {
+			for (int x = 0; x < GridMap.getsizes("x"); x++) {
 				if (gridmap.grid[x][y].exists()) {
 					buttons[x][y].setBackground(Color.BLUE);
 				} else {
@@ -129,9 +134,10 @@ public class DisplayWithGUI {
 		}
 	}
 
+	//paints a specific set of tiles
 	protected static void paint(ArrayList<Tile> tiles) {
-		for (int y = 0; y < 21; y++) {
-			for (int x = 0; x < 21; x++) {
+		for (int y = 0; y < GridMap.getsizes("y"); y++) {
+			for (int x = 0; x < GridMap.getsizes("x"); x++) {
 				if (matcher(tiles, x, y)) {
 					buttons[x][y].setBackground(Color.BLUE);
 				} else {
@@ -141,10 +147,12 @@ public class DisplayWithGUI {
 		}
 	}
 	
+	//paints a single tile eg the one you selected
 	protected static void paint(int x , int y) {
 		buttons[x][y].setBackground(Color.ORANGE);
 	}
 
+	//checks if a tile is an equal to some coordinates 
 	private static boolean matcher(ArrayList<Tile> tiles, int valx, int valy) {
 		for (Tile tile : tiles) {
 			if (tile.getCoords().getx() == valx && tile.getCoords().gety() == valy) {
@@ -154,6 +162,7 @@ public class DisplayWithGUI {
 		return false;
 	}
 
+	//displays an array list of up to 5 Strings used for the data output
 	protected static void displayText(ArrayList<String> toDisplay) {
 		if (toDisplay.size() > 5) {
 			System.out.println("Error trying to display too much");

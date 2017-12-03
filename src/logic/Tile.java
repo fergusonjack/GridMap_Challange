@@ -7,6 +7,7 @@ public class Tile {
 	private Optional<Event> event;
 	private Coordinate coord;
 	
+	
 	public Tile(int valx, int valy, int identif, Boolean bool){
 		coord = new Coordinate(valx, valy);
 		if (bool){
@@ -28,6 +29,7 @@ public class Tile {
 		return coord;
 	}
 	
+	//prints out the coordinate
 	@Override
 	public String toString(){
 		if (event.isPresent()){
@@ -37,6 +39,7 @@ public class Tile {
 		}
 	}
 	
+	//prints out if its is present or not
 	public String toStringx(){
 		if (event.isPresent()){
 			return "x";

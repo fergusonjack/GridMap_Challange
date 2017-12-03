@@ -9,15 +9,14 @@ public class Ticket {
 	private static float min = 10;
 	private static float max = 1500;
 	
-	
 	public Ticket(){
+		//randomises the ticket price taking a min and max value
 		Random rand = new Random();
 		price = ((rand.nextFloat() * (max-min)) + min);
 	}
 	
-	public static Float round(double value, int places) {
-	    if (places < 0) throw new IllegalArgumentException();
-
+	//function used for rounding only to 2 dp
+	public static Float round(double value) {
 	    BigDecimal bd = new BigDecimal(value);
 	    DecimalFormat df = new DecimalFormat("#.##");
 	    return Float.valueOf(df.format(bd));
@@ -28,7 +27,7 @@ public class Ticket {
 	}
 	
 	public String prettyPrice(){
-		return "$" + round(price, 2);
+		return "$" + round(price);
 	}
 
 }
