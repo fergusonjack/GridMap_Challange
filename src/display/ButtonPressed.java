@@ -63,6 +63,10 @@ public class ButtonPressed implements ActionListener {
 		String textx = DisplayWithGUI.xcoordinateF.getText();
 		String texty = DisplayWithGUI.ycoordinateF.getText();
 		
+		//strip all the spaces out
+		textx = textx.replaceAll("\\s+","");
+		texty = texty.replaceAll("\\s+","");
+		
 		try {
 			valx = Integer.valueOf(textx);
 			valy = Integer.valueOf(texty);

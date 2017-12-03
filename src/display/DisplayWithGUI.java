@@ -169,8 +169,16 @@ public class DisplayWithGUI {
 			return;
 		}
 		
-		for (int i = 0 ; i < toDisplay.size() ; i++){
+		int i = 0;
+		while(i < toDisplay.size()){
 			jlabels[i].setText(toDisplay.get(i));
+			i++;
+		}
+		
+		//replaces rest of the labels with white space
+		while (i<jlabels.length){
+			jlabels[i].setText("                          ");
+			i++;
 		}
 	}
 }
